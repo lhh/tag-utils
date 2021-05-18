@@ -105,6 +105,14 @@ def input_to_nevr_dict(inp, **kwargs):
 #   - upgrades: components/builds where the n-e:v-r has increased
 #               from left to right
 def delta(inp_left, inp_right, **kwargs):
+    if 'ignore_release' in kwargs and kwargs['ignore_release']:
+        ignore_release = True
+    else:
+        ignore_release = False
+    if 'ignore_epoch' in kwargs and kwargs['ignore_epoch']:
+        ignore_epoch = True
+    else:
+        ignore_epoch = False
     left = input_to_nevr_dict(inp_left, **kwargs)
     right = input_to_nevr_dict(inp_right, **kwargs)
 
@@ -129,9 +137,14 @@ def delta(inp_left, inp_right, **kwargs):
     for comp in common_comps:
         lnevr = left[comp]
         rnevr = right[comp]
-
         (ln, lv, lr, le, la) = splitFilename(lnevr)
         (rn, rv, rr, re, ra) = splitFilename(rnevr)
+        if ignore_release:
+            lr = '1'
+            rr = '1'
+        if ignore_epoch:
+            le = '0'
+            re = '0'
 
         rebase = False
         if lv != rv:

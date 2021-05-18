@@ -22,6 +22,10 @@ def main():
     parser.add_argument('-N', '--no-inherit', action='store_true',
                         default=False,
                         help='Do not use inherit when checking tags')
+    parser.add_argument('--ignore-release', action='store_true', default=False,
+                        help='Ignore release when comparing')
+    parser.add_argument('--ignore-epoch', action='store_true', default=False,
+                        help='Ignore epoch when comparing')
     parser.add_argument('--skip-same', action='store_true', default=False,
                         help='skip printing entries if they are the same')
 
@@ -44,7 +48,7 @@ def main():
     columns, rows = shutil.get_terminal_size()
     fw = str(int((int(columns) - 3) / 3))
 
-    delta_info = delta(args.left_tag, args.right_tag, inherit=do_inherit)
+    delta_info = delta(args.left_tag, args.right_tag, inherit=do_inherit, ignore_release=args.ignore_release)
 
     lc = sorted(delta_info['old'].keys())
     rc = sorted(delta_info['new'].keys())
